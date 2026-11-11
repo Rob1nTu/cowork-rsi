@@ -1,4 +1,4 @@
-"""Create a private GitHub repository and push without persisting the access token."""
+"""Create a GitHub repository and push without persisting the access token."""
 from __future__ import annotations
 
 import argparse
@@ -20,6 +20,7 @@ def main() -> None:
     parser.add_argument('--token-file', type=Path, required=True)
     parser.add_argument('--name', default='cowork-rsi')
     parser.add_argument('--push', action='store_true')
+    parser.add_argument('--visibility', choices=('public', 'private'))
     args = parser.parse_args()
     if not re.fullmatch(r'[A-Za-z0-9_.-]+', args.name):
         raise SystemExit('Invalid repository name.')
@@ -60,7 +61,7 @@ def main() -> None:
     owner_name = login + '/' + args.name
     status, repo = api('GET', '/repos/' + owner_name)
     if status == 404:
-        status, repo = api('POST', '/user/repos', {'name': args.name, 'private': True,
+        status, repo = api('POST', '/user/repos', {'name': args.name, 'private': args.visibility != 'public',
                    'description': 'Reproducible professional Cowork agent baseline and feedback-driven procedural memory experiments.',
                    'auto_init': False})
         if status not in (200, 201):
@@ -70,8 +71,12 @@ def main() -> None:
         created = False
     else:
         raise SystemExit('Repository lookup failed: ' + str(status) + ' ' + repo.get('message', ''))
-    if repo.get('full_name', '').lower() != owner_name.lower() or not repo.get('private'):
-        raise SystemExit('Existing destination does not match the requested private repository.')
+    if repo.get('full_name', '').lower() != owner_name.lower():
+        raise SystemExit('Existing destination does not match the requested repository owner and name.')
+    if args.visibility is not None and repo['private'] != (args.visibility == 'private'):
+        status, repo = api('PATCH', '/repos/' + owner_name, {'private': args.visibility == 'private'})
+        if status != 200:
+            raise SystemExit('Visibility update failed: ' + str(status) + ' ' + repo.get('message', ''))
     print(json.dumps({'repository': repo['full_name'], 'url': repo['html_url'], 'private': repo['private'],
                       'created': created}, ensure_ascii=False), flush=True)
 
