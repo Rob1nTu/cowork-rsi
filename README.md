@@ -41,6 +41,8 @@ Trajectories preserve raw model responses and API usage. Execution records prese
 ## Entry points
 
 ```bash
+# Fetch exact pinned data/source versions; existing inputs are verified without replacement.
+python scripts/fetch_inputs.py
 # Run from a provisioned remote project root. Provisioning uses the Tsinghua PyPI mirror.
 bash scripts/provision-agent.sh
 /tmp/cowork-agent-env/bin/python scripts/preflight.py

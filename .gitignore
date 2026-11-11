@@ -15,6 +15,7 @@ harness-inspection/
 model-config.json
 *.tar.gz
 *.tgz
+*.partial
 *.zip
 *.safetensors
 *.bin
@@ -25,6 +26,7 @@ venv/
 
 # Execution traces, artifacts and provider responses
 runs/
+collected/
 diagnostics/
 memory/
 *.log

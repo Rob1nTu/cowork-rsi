@@ -36,7 +36,18 @@ def main() -> None:
     evidence = json.dumps(visible, ensure_ascii=False)
     if len(evidence) > 18000:
         evidence = evidence[:7000] + '\n[Middle omitted]\n' + evidence[-11000:]
-    payload = {'model': 'qwen27b', 'temperature': 0.0, 'max_tokens': 1600,
+    target = ROOT / 'memory' / (args.output + '.json')
+    if target.exists():
+        raise SystemExit('Memory version already exists; refusing overwrite.')
+    target.parent.mkdir(exist_ok=True)
+    schema = {'type': 'object', 'properties': {
+        'guidance': {'type': 'string', 'maxLength': 1800},
+        'applicability': {'type': 'string', 'maxLength': 400},
+        'evidence': {'type': 'string', 'maxLength': 700}},
+        'required': ['guidance', 'applicability', 'evidence'], 'additionalProperties': False}
+    payload = {'model': 'qwen27b', 'temperature': 0.0, 'seed': 20261112, 'max_tokens': 2400,
+               'response_format': {'type': 'json_schema', 'json_schema': {
+                   'name': 'procedural_memory', 'strict': True, 'schema': schema}},
                'messages': [{'role': 'system', 'content':
                  'Analyze this agent execution and propose reusable procedural guidance for future professional file tasks. '
                  'Use only the user-visible request and execution evidence supplied. Do not infer hidden answers. '
@@ -53,7 +64,11 @@ def main() -> None:
                                      headers={'Content-Type': 'application/json'})
     with urllib.request.urlopen(request, timeout=180) as response:
         raw = json.load(response)
-    content = raw['choices'][0]['message']['content']
+    response_path = target.parent / f'{args.output}.{time.time_ns()}.response.json'
+    response_path.write_text(json.dumps(raw, ensure_ascii=False, indent=2), encoding='utf-8')
+    content = raw['choices'][0]['message']['content'] or ''
+    if raw['choices'][0].get('finish_reason') == 'length':
+        raise SystemExit('Memory output truncated; raw response retained: ' + str(response_path))
     text = re.sub(r'^```(?:json)?\s*|\s*```$', '', content.strip())
     candidate = json.loads(text)
     if not isinstance(candidate.get('guidance'), str) or len(candidate['guidance']) > 1800:
@@ -65,13 +80,8 @@ def main() -> None:
               'evidence': candidate.get('evidence', ''), 'model': 'qwen27b',
               'generation_usage': raw.get('usage', {}), 'generation_seconds': time.monotonic() - started,
               'protocol': 'Generated from request and visible trace only. Requires measured replay and transfer tests before promotion.'}
-    target = ROOT / 'memory' / (args.output + '.json')
-    if target.exists():
-        raise SystemExit('Memory version already exists; refusing overwrite.')
-    target.parent.mkdir(exist_ok=True)
+    result['generation_response_file'] = response_path.name
     target.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
-    (target.parent / (args.output + '.response.json')).write_text(
-        json.dumps(raw, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(result, ensure_ascii=False), flush=True)
 
 

@@ -27,13 +27,23 @@ checkpoint() {
 trap 'checkpoint interrupted' EXIT
 "$PYTHON" -u scripts/preflight.py
 for task in contract-extract-L3-014 procurement-reconcile-L3-015; do
-  "$PYTHON" -u scripts/run_office.py --task "$task" --run baseline-v1
+  if [ ! -f "runs/baseline-v1/$task/evaluation.json" ]; then
+    "$PYTHON" -u scripts/run_office.py --task "$task" --run baseline-v1
+  else
+    printf 'REUSE_BASELINE:%s\n' "$task"
+  fi
   checkpoint "baseline-$task"
 done
-"$PYTHON" -u scripts/learn_memory.py --task contract-extract-L3-014 --source-run baseline-v1 --output procedural-v1
+if [ ! -f memory/procedural-v1.json ]; then
+  "$PYTHON" -u scripts/learn_memory.py --task contract-extract-L3-014 --source-run baseline-v1 --output procedural-v1
+fi
 checkpoint learned-v1
 for task in contract-extract-L3-014 procurement-reconcile-L3-015; do
-  "$PYTHON" -u scripts/run_office.py --task "$task" --run memory-v1 --memory memory/procedural-v1.json
+  if [ ! -f "runs/memory-v1/$task/evaluation.json" ]; then
+    "$PYTHON" -u scripts/run_office.py --task "$task" --run memory-v1 --memory memory/procedural-v1.json
+  else
+    printf 'REUSE_CANDIDATE:%s\n' "$task"
+  fi
   checkpoint "memory-$task"
 done
 "$PYTHON" -u scripts/compare_pilot.py --baseline baseline-v1 --candidate-run memory-v1 --memory memory/procedural-v1.json --tasks contract-extract-L3-014 procurement-reconcile-L3-015 --output results/pilot-v1.json
