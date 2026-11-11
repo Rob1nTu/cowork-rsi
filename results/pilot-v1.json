@@ -1,0 +1,96 @@
+{
+  "metric": "official_rule_component_only",
+  "tasks": [
+    {
+      "task": "contract-extract-L3-014",
+      "is_source_task": true,
+      "baseline": {
+        "rule_pass_rate": 0.0,
+        "passed": 0,
+        "total": 1,
+        "seconds": 506.8521693777293,
+        "calls": 11,
+        "usage": {
+          "prompt_tokens": 68584,
+          "completion_tokens": 10436,
+          "total_tokens": 79020
+        }
+      },
+      "candidate": {
+        "rule_pass_rate": 0.0,
+        "passed": 0,
+        "total": 1,
+        "seconds": 285.48008268512785,
+        "calls": 40,
+        "usage": {
+          "prompt_tokens": 479591,
+          "completion_tokens": 4071,
+          "total_tokens": 483662
+        }
+      },
+      "delta": 0.0
+    },
+    {
+      "task": "procurement-reconcile-L3-015",
+      "is_source_task": false,
+      "baseline": {
+        "rule_pass_rate": 0.7619,
+        "passed": 16,
+        "total": 21,
+        "seconds": 68.35922264866531,
+        "calls": 7,
+        "usage": {
+          "prompt_tokens": 15129,
+          "completion_tokens": 1263,
+          "total_tokens": 16392
+        }
+      },
+      "candidate": {
+        "rule_pass_rate": 0.7619,
+        "passed": 16,
+        "total": 21,
+        "seconds": 67.87705792486668,
+        "calls": 7,
+        "usage": {
+          "prompt_tokens": 16460,
+          "completion_tokens": 1377,
+          "total_tokens": 17837
+        }
+      },
+      "delta": 0.0
+    }
+  ],
+  "mean_baseline": 0.38095,
+  "mean_candidate": 0.38095,
+  "candidate_memory_sha256": "4c0506465ddc1c33da1ba34faca8c196f4ec60cfb6afa15cede2fb39b0b8a112",
+  "generation_usage": {
+    "prompt_tokens": 8907,
+    "total_tokens": 9321,
+    "completion_tokens": 414,
+    "prompt_tokens_details": null
+  },
+  "generation_seconds": 22.65090475231409,
+  "gate": {
+    "positive_gain": false,
+    "no_per_task_regression": true,
+    "positive_gain_on_other_evolution_tasks": false,
+    "decision": "reject_or_inconclusive"
+  },
+  "limitations": [
+    "Small evolution pilot; no selection or sealed results.",
+    "Rule component excludes any official LLM judging.",
+    "Temperature-zero paired runs do not estimate sampling uncertainty.",
+    "Generation overhead is reported separately; this is not yet a matched total-budget A5 search comparison.",
+    "One earlier failed reflection request was not persisted by the initial learner; its token cost is unknown and excluded from generation_usage."
+  ],
+  "snapshot_sha256": "5e9d261ea1e86e7407f86a191e543faa6a4ff2702de3504efd6aa9157bdacd30",
+  "execution_audit": {
+    "evolution_executions": 4,
+    "selection_executions": 0,
+    "sealed_executions": 0,
+    "contract_baseline_exit": "RepeatedFormatError",
+    "contract_candidate_exit": "LimitsExceeded",
+    "procurement_baseline_exit": "Submitted",
+    "procurement_candidate_exit": "Submitted"
+  }
+}

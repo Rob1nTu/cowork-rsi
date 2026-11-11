@@ -38,6 +38,12 @@ Some tasks combine rule and LLM scores (for example contract extraction specifie
 
 Trajectories preserve raw model responses and API usage. Execution records preserve the model, seed, script hash, split hash, upstream commits, wall time, calls and memory hash. The framework's unknown local-model dollar cost is not an estimate of GPU cost; use actual tokens and wall time, and report GPU-hour accounting separately.
 
+## Measured first pilot
+
+The completed two-task evolution pilot is recorded in `results/pilot-v1.json`. Both conditions scored 0 on contract extraction (no result workbook) and 16/21 (0.7619) on procurement reconciliation. Contract baseline stopped on repeated tool-format errors; the memory condition exhausted its 40-call budget. The candidate produced no measured improvement or transfer gain, so the gate rejected it as inconclusive. It remains an experimental candidate and is not promoted as a verified skill. Contract prompt-token usage rose from 68,584 to 479,591 with memory; reduced wall time is not evidence of a more efficient solution. The successful reflection retry used 9,321 total tokens; one earlier failed reflection call has unknown token overhead because the initial learner failed before saving its response.
+
+Four evolution executions were audited against the frozen manifest; selection and sealed execution counts are both zero. Scores are rule components only. This pilot establishes the executable comparison and records a negative result; it does not establish global improvement, novel memory methodology, or the full matched-budget A5 experiment.
+
 ## Entry points
 
 ```bash
