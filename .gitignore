@@ -1,0 +1,41 @@
+# Local credentials and personal state
+.env
+.env.*
+*.pem
+*.key
+*.token
+github_pat.txt
+.credentials*
+RUN_STATE.md
+
+# Fetched upstream material and model/runtime files
+upstream/
+datasets/
+harness-inspection/
+model-config.json
+*.tar.gz
+*.tgz
+*.zip
+*.safetensors
+*.bin
+*.pt
+*.pth
+.venv/
+venv/
+
+# Execution traces, artifacts and provider responses
+runs/
+diagnostics/
+memory/
+*.log
+tool-call-probe.json
+scripts/inspect_harness_retry.py
+
+# Python and tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.vscode/
+.idea/
+.DS_Store

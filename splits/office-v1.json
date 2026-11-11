@@ -1,0 +1,735 @@
+{
+  "dataset": "Tencent WorkBuddy Bench Office v1.0",
+  "hf_revision": "3e8ad839685c589d83a1dd60fe2d15eabb75f27a",
+  "archive_sha256": "89d4480b483ca2e0555ba96cc7d73c16c78802b17cd822044d5f7f27ab0558bf",
+  "seed": 20261112,
+  "grouping": [
+    "source_case",
+    "exact workspace archive SHA256",
+    "exact instruction SHA256"
+  ],
+  "limitations": "No semantic-equivalence guarantee. Public benchmark may be in model pretraining. All future variants inherit parent split.",
+  "upstream_commits": {
+    "workbuddy-bench": "625b2233093ae4f23e76be28c1f341d41cc70373",
+    "mini-swe-agent": "04d809ceab9df28f9adaed044884180159172930"
+  },
+  "counts": {
+    "evolution": 30,
+    "selection": 10,
+    "sealed": 10
+  },
+  "protocol": {
+    "evolution": "Feedback, memory writes and candidate development allowed.",
+    "selection": "Aggregate candidate selection only; no test-specific memory or task feedback to optimizer.",
+    "sealed": "Never executed during development. Freeze model, harness and memory first; evaluate once with memory read-only and per-task state reset."
+  },
+  "tasks": {
+    "evolution": [
+      {
+        "id": "analyst-forecast-extract-L3-018",
+        "source_case": "analyst-forecast-extract-L3-018",
+        "difficulty": "easy",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L3"
+        ],
+        "workspace_sha256": "0d301694b2770e532a4793bf15aa20bf34a0637d4e2593fbb6082612069ac64f",
+        "instruction_sha256": "2df4b07e9c57157bce9bfb19d47dbb6097a4cda13292de7fbb55ae15a1dabd29",
+        "group": "analyst-forecast-extract-L3-018"
+      },
+      {
+        "id": "api-usage-explain-cli-l3-001",
+        "source_case": "api-usage-explain-cli-l3-001",
+        "difficulty": "easy",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "6caa9c2997b8e9449553bbdea13b5c17d035b657e0451ca31669dadd7308eab8",
+        "instruction_sha256": "80c117555e628bc9915f5f4b42a1c56de71d93028a6031f9a5456bd85993f6ed",
+        "group": "api-usage-explain-cli-l3-001"
+      },
+      {
+        "id": "channel-period-compare-L4-017",
+        "source_case": "channel-period-compare-L4-017",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops"
+        ],
+        "workspace_sha256": "ec1c8f9148a9a2bc136449f8771fbca465ef9119004a54f61bc9f6627ac1b071",
+        "instruction_sha256": "995492f953d70a556cce77fbf017d36553e4be4fe8096a6ebb7d1511e7f8e43a",
+        "group": "channel-period-compare-L4-017"
+      },
+      {
+        "id": "contract-extract-L3-014",
+        "source_case": "contract-extract-L3-014",
+        "difficulty": "easy",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops"
+        ],
+        "workspace_sha256": "02cc64f8b41ef0648aa4c3d943d74b75271db208cda96c45d3c284bc8e108fe8",
+        "instruction_sha256": "54144fc0e140639c916d6bfa7e4c0fb381f5fe6cc3529688dc2a5425801a4dbf",
+        "group": "contract-extract-L3-014"
+      },
+      {
+        "id": "cross-week-dashboard-migration",
+        "source_case": "cross-week-dashboard-migration",
+        "difficulty": "hard",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "860db06d9c97d5d538d7c69340036cd419f2a96ee71a2115af44b60fe1e27ad0",
+        "instruction_sha256": "25dac25351494c9f7954ae57e431f9103abd4546da732980aad69ee6686fc9f8",
+        "group": "cross-week-dashboard-migration"
+      },
+      {
+        "id": "crypto-backtest-chain-L4-002",
+        "source_case": "crypto-backtest-chain-L4-002",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4_plus_L5_candidate"
+        ],
+        "workspace_sha256": "2926102bac1f94d9641304796c358048e4cd7926de5d2ba5d101238f8e693aea",
+        "instruction_sha256": "e17decf36943082e01a6c3a1e78dba0fd0e23bf925d00fdb517da22e5545f2cf",
+        "group": "crypto-backtest-chain-L4-002"
+      },
+      {
+        "id": "daily-creation-checkpoint-recovery",
+        "source_case": "daily-creation-checkpoint-recovery",
+        "difficulty": "hard",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "state-diff-mock-app"
+        ],
+        "workspace_sha256": "ed36e6d5927ad24244f79b38d8be9f66c5f77b01021b901db8913860f4f3850f",
+        "instruction_sha256": "a2df86e9005098dd63e3e96826a1b37c4e717ac8826ece6e4ef9cdb36a8095ff",
+        "group": "daily-creation-checkpoint-recovery"
+      },
+      {
+        "id": "deepep-api-source-anchor-explain",
+        "source_case": "deepep-api-source-anchor-explain",
+        "difficulty": "hard",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "a01267bff3ad8e948a999acd5f65962986ce8c4af93c18c986c5f99e3be55cff",
+        "instruction_sha256": "08977e23af90ab1efc31c43150ae529e07e8feb7185c501149ac39effaf5e61c",
+        "group": "deepep-api-source-anchor-explain"
+      },
+      {
+        "id": "delivery-package-readonly-diff",
+        "source_case": "delivery-package-readonly-diff",
+        "difficulty": "hard",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "state-diff-mock-app"
+        ],
+        "workspace_sha256": "924a64bacd7065e8ae9e625f12bfe3a4012b020ff64c3d6a423397a598fee84a",
+        "instruction_sha256": "d5c060893cbe408ba0c14092ea045cb8bef3fe2cecddc0ecdc168999681de061",
+        "group": "delivery-package-readonly-diff"
+      },
+      {
+        "id": "effective-sop-reconstruction-L5-034",
+        "source_case": "effective-sop-reconstruction-L5-034",
+        "difficulty": "medium",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "wb-v1.0-hardpack",
+          "document-structure",
+          "l5-candidate"
+        ],
+        "workspace_sha256": "977396c4f4f5e2aa7d8b9f29d52f8186a6d92022ca0edd9f2dc0ae89746e1a50",
+        "instruction_sha256": "c5bd747d36f8cda2fd9bdc14d23cc29857d9d6c2a7ea58c0588a28b8df27ab0e",
+        "group": "effective-sop-reconstruction-L5-034"
+      },
+      {
+        "id": "furniture-refinish-L3-016",
+        "source_case": "furniture-refinish-L3-016",
+        "difficulty": "easy",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops"
+        ],
+        "workspace_sha256": "3f32edd10f74f5632f1f9b2c8437df36f0b8e08b55c8efc1c0a66a4ea9fdf45f",
+        "instruction_sha256": "7048f16b81283263ef4a489e57887e850c5905459ed2dd0e4f31186929b6a9e3",
+        "group": "furniture-refinish-L3-016"
+      },
+      {
+        "id": "health-quote-L2-003",
+        "source_case": "health-quote-L2-003",
+        "difficulty": "easy",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops"
+        ],
+        "workspace_sha256": "2d78638f541cc05a423e51a63dc17b62b56d5d5063ab38bf1fc5d8c4ee417c3f",
+        "instruction_sha256": "5396de46ddef3e67d5d289e62136418394d87939fee591dc060d10f63b2ba21a",
+        "group": "health-quote-L2-003"
+      },
+      {
+        "id": "indicator-window-rules-L4-005",
+        "source_case": "indicator-window-rules-L4-005",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "bc0cad57b40031eed053e1b49a12492148e4e6ed47809dde3d76d31ec7597279",
+        "instruction_sha256": "948d615e239d54cccbc3283e83013e52ab9e01993188927f35a4fa123b1e71e0",
+        "group": "indicator-window-rules-L4-005"
+      },
+      {
+        "id": "inspection-notice-provenance-L4-032",
+        "source_case": "inspection-notice-provenance-L4-032",
+        "difficulty": "medium",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "wb-v1.0-hardpack",
+          "bulk-multifile-extraction",
+          "stable-l4"
+        ],
+        "workspace_sha256": "edd28e991e98a39805b174132efaa64fbc6058d54ba5c8513544509469c56396",
+        "instruction_sha256": "9dcfdfb6f0000483bd163487af48a4cefaac6daa4a2150f868949a3bc811d375",
+        "group": "inspection-notice-provenance-L4-032"
+      },
+      {
+        "id": "invoice-email-archive-manifest",
+        "source_case": "invoice-email-archive-manifest",
+        "difficulty": "hard",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "state-diff-mock-app"
+        ],
+        "workspace_sha256": "2ab1b4c94b1b0dc47e1062e4e9cf3622b6aaebeb64bd01bdef334b1d7f770c0c",
+        "instruction_sha256": "5a18d175e10c0761f7b0dc1fd37dad7c34030c79a10fcf21720610f3b91109e0",
+        "group": "invoice-email-archive-manifest"
+      },
+      {
+        "id": "json-screener-summary-L4-004",
+        "source_case": "json-screener-summary-L4-004",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "49f07a364f0ce714793e1e37e8d0ff8be7f5265798ec4cb16f7b5efe654d6bc3",
+        "instruction_sha256": "988485ebc3b172e3caaeeaacce13d49337c28345ea57d87d671b00d0d0bb489d",
+        "group": "json-screener-summary-L4-004"
+      },
+      {
+        "id": "kline-signal-segments-L4-012",
+        "source_case": "kline-signal-segments-L4-012",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "61feaca0e91bc4d8dcd73ff3ac7b38edaa84590da4bd6a9c363f5c4aaa208d51",
+        "instruction_sha256": "dbfcb2c7a29ec8ad58eef835ef879f2e71f74b56dadf7d449263ddb51e324bab",
+        "group": "kline-signal-segments-L4-012"
+      },
+      {
+        "id": "monitoring-weekly-draft-followup",
+        "source_case": "monitoring-weekly-draft-followup",
+        "difficulty": "hard",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "8ef7f6e814dee3c8ffe928cfa3c01a253321b1821287e963b5684bfab3d9763b",
+        "instruction_sha256": "79b6c6881f2e5ef27a6172521287998a5d911a3b9b3ec1982b3c1cbe4e9c951f",
+        "group": "monitoring-weekly-draft-followup"
+      },
+      {
+        "id": "news-event-multifile-extract-L4-013",
+        "source_case": "news-event-multifile-extract-L4-013",
+        "difficulty": "medium",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "d334f7d082b5ca6b6da04dc4894acfad9fb068ef127107f63299879393506974",
+        "instruction_sha256": "17b24af13967ff2bd461ccb7aff2ebddd643cc8dc6fdaac5fab66e7b76f1368d",
+        "group": "news-event-multifile-extract-L4-013"
+      },
+      {
+        "id": "portfolio-valuation-limits-L4-009",
+        "source_case": "portfolio-valuation-limits-L4-009",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "73802d48f10e0a59171983aca46038f54ce6b8f259763c37b5a172deab0bfb2a",
+        "instruction_sha256": "92cf21e445637714615b34f3adbfa1b85de055b3b56fb0bdb0809609c07b98a1",
+        "group": "portfolio-valuation-limits-L4-009"
+      },
+      {
+        "id": "priority-sync-notification-pipeline",
+        "source_case": "priority-sync-notification-pipeline",
+        "difficulty": "hard",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "skill-mcp-harness"
+        ],
+        "workspace_sha256": "7376432ad75c76b91f1908f4e0713ec6bbee940780a9926291e38ba8a2f0a383",
+        "instruction_sha256": "d4666f69be13e69f8ec72298781e43ea9479b7bf62e6567924033a5691ca872e",
+        "group": "priority-sync-notification-pipeline"
+      },
+      {
+        "id": "procurement-reconcile-L3-015",
+        "source_case": "procurement-reconcile-L3-015",
+        "difficulty": "easy",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops"
+        ],
+        "workspace_sha256": "7d0e92d879c04145a790fc8c382c706c074a814939e84698f9821b2db7c44720",
+        "instruction_sha256": "1e1d20b7b4e8af5297b7a230ef9cfb23e89aaea0fc0927dc36b7ecdbf6a1fb7c",
+        "group": "procurement-reconcile-L3-015"
+      },
+      {
+        "id": "rank-ic-topn-L4-001",
+        "source_case": "rank-ic-topn-L4-001",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "8570578db0a86bf413c05f70737d8d82aed7f620f0d5195efd26b3f36ccb1840",
+        "instruction_sha256": "0154c5c9c96e1a7f54173a868c79da7d846959622cb7d9760d3791a41151fb8f",
+        "group": "rank-ic-topn-L4-001"
+      },
+      {
+        "id": "recruiting-search-skill-mock-mcp-hardened",
+        "source_case": "recruiting-search-skill-mock-mcp-hardened",
+        "difficulty": "medium",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "skill-mcp-package-integration",
+          "mock-mcp",
+          "text-only-judge",
+          "state-diff",
+          "trajectory-audit"
+        ],
+        "workspace_sha256": "465fa215bb77c477a52c1d306fbfb6e260a1beebddea7ed69b4091cbdfd95e7d",
+        "instruction_sha256": "24f322c96c200fdf89a6f835e1f2df7d3e8b76746c34cf740684a041bed6786e",
+        "group": "recruiting-search-skill-mock-mcp-hardened"
+      },
+      {
+        "id": "research-factor-table-extract-L3-016",
+        "source_case": "research-factor-table-extract-L3-016",
+        "difficulty": "easy",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L3"
+        ],
+        "workspace_sha256": "90ef4555553256f6e9a28578ac1051177556a6af5468b36e52d402e6e449a726",
+        "instruction_sha256": "e739f4d8e21c2a8dfb7bf658cf93aefb2bf189c181bda342cd52c480ace25661",
+        "group": "research-factor-table-extract-L3-016"
+      },
+      {
+        "id": "safety-inspection-extract-L4-019",
+        "source_case": "safety-inspection-extract-L4-019",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops"
+        ],
+        "workspace_sha256": "165a0a1df805eb0a608a544cf6e78eb3e119b0fd77816f764ccdc1d5245f5531",
+        "instruction_sha256": "497aadb64097047916bf3d6236f0a5e755d117b7fa63603080429c18ba4879a5",
+        "group": "safety-inspection-extract-L4-019"
+      },
+      {
+        "id": "service-channel-ticket-daily",
+        "source_case": "service-channel-ticket-daily",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "b715c70c138b99456130eb9daf0e3365843575bbb78c60f9efb39bfb67ce302e",
+        "instruction_sha256": "d4d8ffb5049a6a77d37ec2a21cc0cbc0b2675bc3da303fe0662a4554d7513177",
+        "group": "service-channel-ticket-daily"
+      },
+      {
+        "id": "static-strategy-signal-report-L3-015",
+        "source_case": "static-strategy-signal-report-L3-015",
+        "difficulty": "easy",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L3"
+        ],
+        "workspace_sha256": "fca955a8cdee4da632c3c8b7dbe3bc9ca32316d78c97b6fb26c1feed48bb2b94",
+        "instruction_sha256": "83a023cc3abf23eba6a95a98ca3e2a32d274105bff21dd987010d65464520339",
+        "group": "static-strategy-signal-report-L3-015"
+      },
+      {
+        "id": "wechat-tech-topic-package-hardened",
+        "source_case": "wechat-tech-topic-package-hardened",
+        "difficulty": "hard",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "7d9dea03bbebfa43959e4fc3b40b9821450697b68b472811e5057ac21ef9ea6e",
+        "instruction_sha256": "2e4b6d7f378b041d1e4f0249e6a7c7e67aea90bd340b5eed97713b04c25693d9",
+        "group": "wechat-tech-topic-package-hardened"
+      },
+      {
+        "id": "xiaohongshu-psychology-note-pack",
+        "source_case": "xiaohongshu-psychology-note-pack",
+        "difficulty": "medium",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "2ff821f2c5f57885cdb3c300ab0a455837873173ba0b613e2b6559375f4bd9ac",
+        "instruction_sha256": "3fbcc3c12974c70a1e434c9f99a5b04f38191d8192c4a6b0e0941ccf742a8bec",
+        "group": "xiaohongshu-psychology-note-pack"
+      }
+    ],
+    "selection": [
+      {
+        "id": "calendar-dida-sync-state",
+        "source_case": "calendar-dida-sync-state",
+        "difficulty": "medium",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "state-diff",
+          "mock-app",
+          "deterministic-judge",
+          "json",
+          "markdown",
+          "multi-source-merge-reconcile"
+        ],
+        "workspace_sha256": "d275162a650f0b9fbbd1c574e7fcc36ad647b0d31a19618bebcea3c86b5c34f0",
+        "instruction_sha256": "0e1d55600c11d49efbf1f67e7fc92906e357901c5d338fba0781a3ed8c87c4da",
+        "group": "calendar-dida-sync-state"
+      },
+      {
+        "id": "drug-inventory-split-L2-006",
+        "source_case": "drug-inventory-split-L2-006",
+        "difficulty": "easy",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops"
+        ],
+        "workspace_sha256": "64f1eae54c3e3fad1e7c571a797e164a603bbe17bf42f3387128971cc2a42250",
+        "instruction_sha256": "e3cea9e6a25f0dc0799171211e83986eb93b0d09bb31b3e568a7eb818a9c0fb0",
+        "group": "drug-inventory-split-L2-006"
+      },
+      {
+        "id": "execution-closeout-reconcile-L4-003-successor",
+        "source_case": "execution-closeout-reconcile-L4-003-successor",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "e5dc9c5386c312dc12951ffbf39e05057fbfceac8f6485f20830163c426054c5",
+        "instruction_sha256": "ca0939bcb5fce291d2a30084ec7de18be6c0804d0b541dbe9be623aa25150a20",
+        "group": "execution-closeout-reconcile-L4-003-successor"
+      },
+      {
+        "id": "html-report-quadrant-ppt",
+        "source_case": "html-report-quadrant-ppt",
+        "difficulty": "medium",
+        "category": "doc-ops",
+        "tags": [
+          "deterministic-judge",
+          "doc-ops"
+        ],
+        "workspace_sha256": "2a477d3279075f8f85c9a9d99b556118e13ffe7eb2cb449d84b9572fc1299a0b",
+        "instruction_sha256": "97be00747a9a7bbd6c6b0f73928fcc53f9e09ee4dd13d71d1920cac3377edc63",
+        "group": "html-report-quadrant-ppt"
+      },
+      {
+        "id": "prd-system-design-task-breakdown",
+        "source_case": "prd-system-design-task-breakdown",
+        "difficulty": "easy",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "deterministic-judge",
+          "markdown",
+          "structured-extraction",
+          "artifact-relation-graph"
+        ],
+        "workspace_sha256": "033e70ac8129394ba4750d7082625ba0a56255f50aed265a9a1a978809427818",
+        "instruction_sha256": "4aecfe6aa15a1dafe46b8092ad0900db234d0cf94cd43577d7fe67cd8d19f2db",
+        "group": "prd-system-design-task-breakdown"
+      },
+      {
+        "id": "release-phase-gate-progression",
+        "source_case": "release-phase-gate-progression",
+        "difficulty": "hard",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "skill-mcp-harness"
+        ],
+        "workspace_sha256": "54cccd5046f9428bbcd39737ac97e323cf38d4ddcb986d838d1bc443473bf64d",
+        "instruction_sha256": "17bb53b5b5ac309d645545fed66555af0b98a8d1bb44aa7aa991bbdc2001e602",
+        "group": "release-phase-gate-progression"
+      },
+      {
+        "id": "rule-based-stock-exclusion-L4-011",
+        "source_case": "rule-based-stock-exclusion-L4-011",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "616c8879996191117e5066fef66a9b51347a1c8d596f79d69f76ca2573cad0e4",
+        "instruction_sha256": "db161c5f5fe329d922b1ea666b03dcec35f6cb49ce45e0f63c5a870022eeff7c",
+        "group": "rule-based-stock-exclusion-L4-011"
+      },
+      {
+        "id": "stock-fund-return-compare-L3-010",
+        "source_case": "stock-fund-return-compare-L3-010",
+        "difficulty": "easy",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L3"
+        ],
+        "workspace_sha256": "c8ecbafe354f2500b6b9d550701aa06e4e11dc363bbb77031701a1efaa37f01f",
+        "instruction_sha256": "58a866367b97f70ce176ba36af35676ffb7c5f9cb55baaffc0093e58c2133be8",
+        "group": "stock-fund-return-compare-L3-010"
+      },
+      {
+        "id": "trade-pnl-positions-L4-007",
+        "source_case": "trade-pnl-positions-L4-007",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L4"
+        ],
+        "workspace_sha256": "edff0d4eb45fa67d119fa26d4c99f862c20b2124d9e20ab3e4b05cb15b0d5ebc",
+        "instruction_sha256": "5d121c57ca10f071523bc1bd24c1dbe72361fb4651c062a73dbb90d88984b370",
+        "group": "trade-pnl-positions-L4-007"
+      },
+      {
+        "id": "xmind-screenshot-template-ppt",
+        "source_case": "xmind-screenshot-template-ppt",
+        "difficulty": "hard",
+        "category": "doc-ops",
+        "tags": [
+          "deterministic-judge",
+          "doc-ops"
+        ],
+        "workspace_sha256": "1ada8822b8ae8ce222b6b4f3d1283acaf4e22ebaa08d65e8b2ec265d660dcb4d",
+        "instruction_sha256": "d0f3a2f3de1f5f0423930372abed886dfaa7ea973a9f706070676bb43670432a",
+        "group": "xmind-screenshot-template-ppt"
+      }
+    ],
+    "sealed": [
+      {
+        "id": "board-material-update-timeline-excel",
+        "source_case": "board-material-update-timeline-excel",
+        "difficulty": "medium",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "deterministic-judge",
+          "pptx",
+          "xlsx",
+          "document-object-editing"
+        ],
+        "workspace_sha256": "6cc32cc26ac8c5cdeb18ec3c53d783e0eeaca3b225344abc47f10f8705bb6274",
+        "instruction_sha256": "23bfbf530f0165bdee54eb45b8db800f5c8a4351bb817c48a394808d60ad2f05",
+        "group": "board-material-update-timeline-excel"
+      },
+      {
+        "id": "cloudagent-sdk-doc-validation-report",
+        "source_case": "cloudagent-sdk-doc-validation-report",
+        "difficulty": "hard",
+        "category": "automation-workdir",
+        "tags": [
+          "automation-workdir",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "e9a9b855453c07a7585e2b6ec1df69bf9a9ee31b8c1a4cd8c7233783917fe024",
+        "instruction_sha256": "c51294214e04dae523e58b5dec611ffb432ff53e16f2f18b1d21ec86db6cb047",
+        "group": "cloudagent-sdk-doc-validation-report"
+      },
+      {
+        "id": "device-incident-attribution-L5-037",
+        "source_case": "device-incident-attribution-L5-037",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0-hardpack",
+          "temporal-evidence-chain",
+          "l5-successor-candidate",
+          "r10-introduced"
+        ],
+        "workspace_sha256": "fb3c6f0a15ba4c8cc05aa5a5149d6c48ab42f35119b0ae7a3a8d840c91dd37e2",
+        "instruction_sha256": "df912e0f4fa9f2be34c2c009d1856857c2c77189bba73f45448840ca316561b9",
+        "group": "device-incident-attribution-L5-037"
+      },
+      {
+        "id": "effective-control-state-L5-036",
+        "source_case": "effective-control-state-L5-036",
+        "difficulty": "hard",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "wb-v1.0-hardpack",
+          "control-state",
+          "l5-successor-candidate"
+        ],
+        "workspace_sha256": "8ae02f11a4a11b4a5f8775ce38dde03a3cffa790252ecb417be916acc4ed06bc",
+        "instruction_sha256": "6ad8211361b4ff8d1057fb7608695604ab2f8434824b0e1bc6759573fa87c0df",
+        "group": "effective-control-state-L5-036"
+      },
+      {
+        "id": "fund-product-table-normalize-L3-017",
+        "source_case": "fund-product-table-normalize-L3-017",
+        "difficulty": "easy",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "wb-v1.0",
+          "finance-quant",
+          "L3"
+        ],
+        "workspace_sha256": "1e9c31f5c327efd39078fe5fd3f03735b87b8af69ecbffb104bee6cce106b06d",
+        "instruction_sha256": "e46ac653718396312b8f391e4236c49c97bd1936e2102bf3923dfa485e4b3fb5",
+        "group": "fund-product-table-normalize-L3-017"
+      },
+      {
+        "id": "handbook-notice-insert-L3L4-030",
+        "source_case": "handbook-notice-insert-L3L4-030",
+        "difficulty": "medium",
+        "category": "doc-ops",
+        "tags": [
+          "doc-ops",
+          "wb-v1.0-hardpack",
+          "document-structure",
+          "boundary-anchor"
+        ],
+        "workspace_sha256": "9b87ad2d8cbd54f9c40eac2e20b3fe2331f94bc0c82aded33687e2c08baa1557",
+        "instruction_sha256": "bb9e4f871c5ab58890aa177afac3ce3f7a282a58df3330608cf9f3f197fe1c60",
+        "group": "handbook-notice-insert-L3L4-030"
+      },
+      {
+        "id": "market-daily-brief-a-share-recap",
+        "source_case": "market-daily-brief-a-share-recap",
+        "difficulty": "hard",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "text-only-judge"
+        ],
+        "workspace_sha256": "38532bbbe80e158e0cd8124492e3a076e3266615fea274560c022fa59ec078d2",
+        "instruction_sha256": "a4a38613e962e889fe73ab7f4fb2b0b68d2226df2aa95bf6bfadac9bba28fca2",
+        "group": "market-daily-brief-a-share-recap"
+      },
+      {
+        "id": "subscription-credit-reconcile-L4-024",
+        "source_case": "subscription-credit-reconcile-L4-024",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0-hardpack",
+          "merge-reconcile"
+        ],
+        "workspace_sha256": "23c7a862026b0da61d9bc789e234b1ef9d9b380dcc95faa43327ef11085a5f9d",
+        "instruction_sha256": "8f106ee431ed5f0642fda71c53cb7a6ae59f208ceebe9a848915ea001b51bfbd",
+        "group": "subscription-credit-reconcile-L4-024"
+      },
+      {
+        "id": "ticket-weekly-L3-010",
+        "source_case": "ticket-weekly-L3-010",
+        "difficulty": "easy",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops"
+        ],
+        "workspace_sha256": "ce231303a232a1d2325b3957a5e92585d3fc67f9b13e77a79c2978dcaaf4a624",
+        "instruction_sha256": "65cd4d4758926976611ce5844fad64d8e288e3e905226a25418b25be1ad96a93",
+        "group": "ticket-weekly-L3-010"
+      },
+      {
+        "id": "warranty-recovery-allocation-L5-033",
+        "source_case": "warranty-recovery-allocation-L5-033",
+        "difficulty": "medium",
+        "category": "data-file-ops",
+        "tags": [
+          "data-file-ops",
+          "wb-v1.0-hardpack",
+          "complex-rule-system",
+          "l5-candidate"
+        ],
+        "workspace_sha256": "eb82aa30bc12e4688145f6dc20815f1c2309186fff460fcd56b1b348235d6627",
+        "instruction_sha256": "700a5b01bc0fa316df4c7729ab5dadc15ad713b4db9a667fa0ea4a30ac6c3bde",
+        "group": "warranty-recovery-allocation-L5-033"
+      }
+    ]
+  }
+}
