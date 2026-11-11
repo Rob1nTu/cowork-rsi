@@ -8,6 +8,7 @@ This project adapts the fixed [mini-swe-agent](https://github.com/SWE-agent/mini
 - Download archive SHA256: `89d4480b483ca2e0555ba96cc7d73c16c78802b17cd822044d5f7f27ab0558bf`.
 - mini-swe-agent commit: `04d809ceab9df28f9adaed044884180159172930`.
 - Official benchmark framework commit: `625b2233093ae4f23e76be28c1f341d41cc70373`.
+- Agent runtime: Python 3.12.13, Bubblewrap 0.4.0; exact installed Python package versions are recorded in `agent-requirements.lock.txt`.
 - Split seed: `20261112`; 30 evolution, 10 selection, 10 sealed tasks. The frozen manifest is `splits/office-v1.json`. Its SHA256 is `e641b5541df40b236cab3402eefe866c90258591061c169990fb81fbcb969bfc`.
 - Grouping joins equal source cases, exact workspace archives and exact instruction bytes. This release has 50 unique groups by these rules. It does not prove absence of semantic overlap or model pretraining contamination.
 - User-supplied model path: `/data/L202500306/L202500306/tlb/models/Qwen3.8-27B`. Architecture metadata is Qwen3.5; checkpoint directory provenance beyond this supplied location has not been independently certified.
@@ -40,7 +41,7 @@ Trajectories preserve raw model responses and API usage. Execution records prese
 ## Entry points
 
 ```bash
-# Run from a provisioned remote project root. Set the proxy tunnel before provisioning.
+# Run from a provisioned remote project root. Provisioning uses the Tsinghua PyPI mirror.
 bash scripts/provision-agent.sh
 /tmp/cowork-agent-env/bin/python scripts/preflight.py
 /tmp/cowork-agent-env/bin/python scripts/run_office.py --task contract-extract-L3-014 --run baseline-v1

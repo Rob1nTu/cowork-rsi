@@ -22,6 +22,7 @@ from minisweagent.models.litellm_model import LitellmModel
 
 BASE_PYTHON = '/data/L202500306/L202500306/tlb/conda-envs/vllm025'
 AGENT_PYTHON = '/tmp/cowork-agent-env'
+CLEAN_ENV = {'PATH': '/usr/bin:/bin', 'HOME': '/root', 'LANG': 'C.UTF-8'}
 
 
 def digest(path: Path) -> str:
@@ -37,13 +38,12 @@ def dump(path: Path, value: dict) -> None:
 
 def sandbox_args(workspace: Path, *, tests: Path | None = None, logs: Path | None = None) -> list[str]:
     args = ['--unshare-user', '--unshare-pid', '--unshare-net', '--die-with-parent',
-            '--new-session', '--clearenv', '--tmpfs', '/tmp']
+            '--new-session', '--tmpfs', '/tmp']
     for source in ('/usr', '/bin', '/lib', '/lib64', BASE_PYTHON, AGENT_PYTHON):
         args += ['--ro-bind', source, source]
     args += ['--dir', '/proc', '--dev', '/dev', '--dir', '/root',
              '--setenv', 'HOME', '/root', '--setenv', 'LANG', 'C.UTF-8',
              '--setenv', 'PATH', AGENT_PYTHON + '/bin:/usr/bin:/bin',
-             '--setenv', 'LD_LIBRARY_PATH', BASE_PYTHON + '/lib',
              '--bind' if tests is None else '--ro-bind', str(workspace), '/workspace',
              '--chdir', '/workspace']
     if tests is not None:
@@ -67,7 +67,7 @@ class OfficeEnvironment(BubblewrapEnvironment):
         started = time.monotonic()
         result = subprocess.run([self.config.executable, *self.config.wrapper_args,
                                  'bash', '-c', command], capture_output=True, text=True,
-                                encoding='utf-8', errors='replace', timeout=timeout or self.config.timeout)
+                                encoding='utf-8', errors='replace', env=CLEAN_ENV, timeout=timeout or self.config.timeout)
         output = {'output': result.stdout + result.stderr, 'returncode': result.returncode,
                   'exception_info': ''}
         self.commands += 1
@@ -99,13 +99,13 @@ def grade(task_dir: Path, workspace: Path, result_dir: Path) -> dict:
             AGENT_PYTHON + '/bin/python', '-m', 'pytest', '/tests/grading', '-c', '/dev/null',
             '--confcutdir=/tests', '-p', 'no:cacheprovider', '-v', '--tb=short',
             '--junitxml=/logs/verifier/results.xml']
-    completed = subprocess.run(args, capture_output=True, text=True, timeout=1800)
+    completed = subprocess.run(args, capture_output=True, text=True, env=CLEAN_ENV, timeout=1800)
     (logs / 'test_output.txt').write_text(completed.stdout + completed.stderr, encoding='utf-8')
     # Execute the pinned task's official score reducer, outside agent visibility.
     reducer = [str(ROOT / 'tools/usr/bin/bwrap'), *sandbox_args(workspace, tests=task_dir / 'tests', logs=logs),
                AGENT_PYTHON + '/bin/python', '/tests/grading/score_core.py',
                '--pytest-exit', str(completed.returncode)]
-    reduced = subprocess.run(reducer, capture_output=True, text=True, timeout=120)
+    reduced = subprocess.run(reducer, capture_output=True, text=True, env=CLEAN_ENV, timeout=120)
     (logs / 'score_reducer.txt').write_text(reduced.stdout + reduced.stderr, encoding='utf-8')
     if reduced.returncode != 0 or not (logs / 'score.json').exists():
         raise RuntimeError('Official rule score reduction failed; see verifier logs.')

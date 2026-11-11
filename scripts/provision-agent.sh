@@ -12,7 +12,7 @@ fi
 if [ ! -x /tmp/cowork-agent-env/bin/python ]; then
   "$BASE/bin/python" -m venv --copies /tmp/cowork-agent-env
 fi
-export HTTPS_PROXY=http://127.0.0.1:17897 HTTP_PROXY=http://127.0.0.1:17897 NO_PROXY=127.0.0.1,localhost
-/tmp/cowork-agent-env/bin/python -m pip install --disable-pip-version-check --timeout 30 --retries 5 'litellm==1.75.5.post2' 'openai==1.99.9' 'jinja2==3.1.6' 'pydantic==2.11.7' 'rich==14.1.0' 'platformdirs==4.3.8' 'python-dotenv==1.1.1' 'pyyaml==6.0.2' 'requests==2.32.4' 'pytest==8.3.4' 'openpyxl==3.1.5' 'pandas==2.3.1' 'python-docx==1.2.0' 'python-pptx==1.0.2' 'pypdf==5.9.0' 'pdfplumber==0.11.7' 'pillow==11.3.0' 'numpy==2.3.2' 'beautifulsoup4==4.13.4' 'lxml==6.0.0' 'httpx==0.28.1' 'anyio==4.10.0' 'tokenizers==0.21.4' 'huggingface-hub==0.34.3' 'tiktoken==0.11.0' 'tenacity==9.1.2'
+export HTTPS_PROXY= HTTP_PROXY= ALL_PROXY= NO_PROXY=127.0.0.1,localhost
+/tmp/cowork-agent-env/bin/python -m pip install --disable-pip-version-check --index-url https://pypi.tuna.tsinghua.edu.cn/simple --timeout 30 --retries 5 'litellm==1.75.5.post2' 'openai==1.99.9' 'jinja2==3.1.6' 'pydantic==2.11.7' 'rich==14.1.0' 'platformdirs==4.3.8' 'python-dotenv==1.1.1' 'pyyaml==6.0.2' 'requests==2.32.4' 'pytest==8.3.4' 'openpyxl==3.1.5' 'pandas==2.3.1' 'python-docx==1.2.0' 'python-pptx==1.0.2' 'pypdf==5.9.0' 'pdfplumber==0.11.7' 'pillow==11.3.0' 'numpy==2.3.2' 'beautifulsoup4==4.13.4' 'lxml==6.0.0' 'httpx==0.28.1' 'anyio==4.10.0' 'tokenizers==0.21.4' 'huggingface-hub==0.34.3' 'tiktoken==0.11.0' 'tenacity==9.1.2'
 /tmp/cowork-agent-env/bin/python -m pip freeze > "$ROOT/agent-requirements.lock.txt"
 echo PROVISION_DONE
