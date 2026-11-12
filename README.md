@@ -30,7 +30,7 @@ Only evolution tasks may be run by the pilot runner or consumed by the memory le
 
 ## Execution and evaluation boundaries
 
-The controller runs upstream `DefaultAgent` with upstream `LitellmModel`. Bash actions run under Bubblewrap in isolated user/PID/network namespaces. Only the task workspace is writable; the Python runtime is read-only. The task cannot see the dataset tests/gold, project checkout, SSH credentials or model API. An empty proc directory avoids exposing host-process filesystem roots on a host which forbids mounting proc inside namespaces.
+The controller runs upstream `DefaultAgent` with a local `ManagedLitellmModel` wrapper. The wrapper enables Qwen thinking per request, maps the vLLM `reasoning`/legacy `reasoning_content` fields, and applies bounded context management before each API call. Bash actions run under Bubblewrap in isolated user/PID/network namespaces. Only the task workspace is writable; the Python runtime is read-only. The task cannot see the dataset tests/gold, project checkout, SSH credentials or model API. An empty proc directory avoids exposing host-process filesystem roots on a host which forbids mounting proc inside namespaces.
 
 The trusted rule grader is a separate invocation with read-only task outputs and read-only tests/gold, with only verifier logs writable. It invokes each task's official pytest tests and official score reducer. `tests/test.sh` is a Harbor compatibility stub which exits 64 and must not be used as the actual grader.
 
@@ -43,6 +43,12 @@ Trajectories preserve raw model responses and API usage. Execution records prese
 The completed two-task evolution pilot is recorded in `results/pilot-v1.json`. Both conditions scored 0 on contract extraction (no result workbook) and 16/21 (0.7619) on procurement reconciliation. Contract baseline stopped on repeated tool-format errors; the memory condition exhausted its 40-call budget. The candidate produced no measured improvement or transfer gain, so the gate rejected it as inconclusive. It remains an experimental candidate and is not promoted as a verified skill. Contract prompt-token usage rose from 68,584 to 479,591 with memory; reduced wall time is not evidence of a more efficient solution. The successful reflection retry used 9,321 total tokens; one earlier failed reflection call has unknown token overhead because the initial learner failed before saving its response.
 
 Four evolution executions were audited against the frozen manifest; selection and sealed execution counts are both zero. Scores are rule components only. This pilot establishes the executable comparison and records a negative result; it does not establish global improvement, novel memory methodology, or the full matched-budget A5 experiment.
+
+## Thinking and context budget
+
+New runs request `chat_template_kwargs.enable_thinking=true`; applying the server-side default and reasoning parser requires restarting the endpoint with the updated `serve-qwen27b.sh`. The current 24,576-token server limit remains; it was not raised to Qwen3.5's native 262,144-token window because that requires separate GPU capacity validation. Runner defaults reserve 4,096 output tokens and a 1,024-token input margin. Before a request, the manager conservatively estimates CJK/ASCII tokens, writes a compact checkpoint under the task workspace, retains the task contract plus a recent tool-call tail, and records each compaction in `context-compactions.jsonl`. The full trajectory is still saved separately by the agent. This is a bounded heuristic, not the exact tokenizer; runs must be monitored for server-side context errors. Run `python -m pytest scripts/test_context_manager.py` for local manager checks. To compare with historical runs, use fresh run labels and pass `--no-thinking --max-tokens 3072` for the old mode.
+
+Harness² is cited as a design reference for evidence-on-disk, short pointers and retrieval, not as a claim that this pilot reproduces its recursive harness search. See `research/qwen-thinking-harness2.md` for primary-source references.
 
 ## Entry points
 

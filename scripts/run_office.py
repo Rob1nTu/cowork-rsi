@@ -11,6 +11,8 @@ import tarfile
 import time
 from pathlib import Path
 
+import litellm
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'upstream/mini-swe-agent/src'))
 os.environ['MSWEA_SILENT_STARTUP'] = '1'
@@ -19,6 +21,33 @@ os.environ['LITELLM_LOCAL_MODEL_COST_MAP'] = 'true'
 from minisweagent.agents.default import DefaultAgent
 from minisweagent.environments.extra.bubblewrap import BubblewrapEnvironment
 from minisweagent.models.litellm_model import LitellmModel
+
+from context_manager import ContextWindowManager
+
+
+class ManagedLitellmModel(LitellmModel):
+    def __init__(self, *, context_manager: ContextWindowManager, **kwargs):
+        self.context_manager = context_manager
+        super().__init__(**kwargs)
+
+    def query(self, messages: list[dict[str, str]], **kwargs) -> dict:
+        managed = self.context_manager.prepare(messages)
+        try:
+            return super().query(managed, **kwargs)
+        except litellm.exceptions.ContextWindowExceededError:
+            return super().query(self.context_manager.prepare(messages, force=True), **kwargs)
+
+    def _prepare_messages_for_api(self, messages: list[dict]) -> list[dict]:
+        prepared = super()._prepare_messages_for_api(messages)
+        for message in prepared:
+            if message.get("reasoning_content") and not message.get("reasoning"):
+                message["reasoning"] = message.pop("reasoning_content")
+        return prepared
+
+    def serialize(self) -> dict:
+        data = super().serialize()
+        data["info"]["context_management"] = self.context_manager.serialize()
+        return data
 
 BASE_PYTHON = '/data/L202500306/L202500306/tlb/conda-envs/vllm025'
 AGENT_PYTHON = '/tmp/cowork-agent-env'
@@ -121,6 +150,9 @@ def main() -> None:
     parser.add_argument('--run', required=True)
     parser.add_argument('--memory', type=Path)
     parser.add_argument('--steps', type=int, default=40)
+    parser.add_argument('--context-limit', type=int, default=24576)
+    parser.add_argument('--max-tokens', type=int, default=4096)
+    parser.add_argument('--no-thinking', action='store_true')
     parser.add_argument('--grade-only', action='store_true')
     args = parser.parse_args()
     manifest = json.loads((ROOT / 'splits/office-v1.json').read_text(encoding='utf-8'))
@@ -145,12 +177,21 @@ def main() -> None:
         dump(result_dir / 'isolation.json', probe)
         if probe['returncode'] != 0 or 'ISOLATION_OK' not in probe['output']:
             raise SystemExit('Sandbox preflight failed.')
-        model = LitellmModel(model_name='openai/qwen27b', cost_tracking='ignore_errors',
-                             model_kwargs={'api_base': 'http://127.0.0.1:8000/v1', 'api_key': 'local',
-                                           'temperature': 0.0, 'seed': 20261112, 'max_tokens': 3072,
-                                           'timeout': 180, 'num_retries': 2,
-                                           'extra_body': {'chat_template_kwargs': {'enable_thinking': False}}},
-                             observation_template=OBSERVATION)
+        context_manager = ContextWindowManager(
+            context_limit=args.context_limit,
+            max_output_tokens=args.max_tokens,
+            workspace=workspace,
+            audit_path=result_dir / 'context-compactions.jsonl',
+        )
+        model = ManagedLitellmModel(
+            context_manager=context_manager,
+            model_name='openai/qwen27b', cost_tracking='ignore_errors',
+            model_kwargs={'api_base': 'http://127.0.0.1:8000/v1', 'api_key': 'local',
+                          'temperature': 0.0, 'seed': 20261112, 'max_tokens': args.max_tokens,
+                          'timeout': 180, 'num_retries': 2,
+                          'extra_body': {'chat_template_kwargs': {'enable_thinking': not args.no_thinking}}},
+            observation_template=OBSERVATION,
+        )
         task = (task_dir / 'instruction.md').read_text(encoding='utf-8')
         if args.memory:
             memory = json.loads(args.memory.read_text(encoding='utf-8'))
@@ -168,7 +209,10 @@ def main() -> None:
                  'run': args.run, 'seconds': time.monotonic() - started,
                  'calls': agent.n_calls, 'commands': env.commands,
                  'model': 'qwen27b', 'seed': 20261112, 'runner_sha256': digest(Path(__file__)), 'steps': args.steps,
-                 'memory_sha256': digest(args.memory) if args.memory else None,
+                                   'memory_sha256': digest(args.memory) if args.memory else None,
+                  'context_limit': args.context_limit, 'max_tokens': args.max_tokens,
+                  'thinking': not args.no_thinking,
+
                  'split_manifest_sha256': digest(ROOT / 'splits/office-v1.json'),
                  'upstream_commits': manifest['upstream_commits']})
         print('EXIT', exit_info, flush=True)

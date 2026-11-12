@@ -33,8 +33,8 @@ nohup "$VENV/bin/python" -m vllm.entrypoints.openai.api_server \
   --max-model-len 24576 --max-num-seqs 16 --gpu-memory-utilization 0.85 \
   --enforce-eager --language-model-only --skip-mm-profiling \
   --gdn-prefill-backend triton \
-  --enable-auto-tool-choice --tool-call-parser qwen3_coder \
-  --default-chat-template-kwargs '{"enable_thinking":false}' \
+  --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser qwen3 \
+  --default-chat-template-kwargs '{"enable_thinking":true}' \
   > "$RUN_DIR/qwen27b-tp4.log" 2>&1 < /dev/null &
 PID=$!
 printf '%s\n' "$PID" > "$RUN_DIR/qwen27b-tp4.pid"
