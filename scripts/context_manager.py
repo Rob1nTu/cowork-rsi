@@ -25,7 +25,6 @@ class ContextWindowManager:
         workspace: Path,
         audit_path: Path,
         input_safety_tokens: int = 1024,
-        chars_per_token: float = 3.0,
         recent_messages: int = 12,
     ) -> None:
         self.context_limit = context_limit
@@ -33,7 +32,6 @@ class ContextWindowManager:
         self.input_budget = context_limit - max_output_tokens - input_safety_tokens
         self.workspace = workspace
         self.audit_path = audit_path
-        self.chars_per_token = chars_per_token
         self.recent_messages = recent_messages
         self.compactions = 0
         self.last_estimate = 0
@@ -74,10 +72,16 @@ class ContextWindowManager:
     def _checkpoint(self, messages: list[dict[str, Any]]) -> Path:
         path = self.workspace / ".cowork_context" / "checkpoint.md"
         path.parent.mkdir(parents=True, exist_ok=True)
+        archive = path.parent / "history.jsonl"
+        archive.write_text(
+            "".join(json.dumps(message, ensure_ascii=False, default=repr) + "\n" for message in messages[2:]),
+            encoding="utf-8",
+        )
         lines = [
             "# Context checkpoint",
             "",
             "Earlier conversation messages were compacted by the harness.",
+            "The full compacted messages, including reasoning and tool results, are in `.cowork_context/history.jsonl`.",
             "Persistent files and outputs remain in `/workspace`; inspect them with bash before acting.",
             "The following is an index of earlier model actions and observations, not a grading answer:",
             "",

@@ -37,6 +37,9 @@ def test_cjk_estimate_is_conservative_and_compacts_with_checkpoint(tmp_path):
     checkpoint = subject.workspace / ".cowork_context/checkpoint.md"
     assert checkpoint.exists()
     assert "字" in checkpoint.read_text(encoding="utf-8")
+    history = subject.workspace / ".cowork_context/history.jsonl"
+    assert history.exists()
+    assert len(history.read_text(encoding="utf-8").splitlines()) == len(messages) - 2
     audit = json.loads((tmp_path / "context-compactions.jsonl").read_text(encoding="utf-8"))
     assert audit["after_messages"] == len(compacted)
     assert audit["forced_after_context_error"] is False
