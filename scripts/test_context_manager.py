@@ -39,6 +39,7 @@ def test_cjk_estimate_is_conservative_and_compacts_with_checkpoint(tmp_path):
     assert "字" in checkpoint.read_text(encoding="utf-8")
     audit = json.loads((tmp_path / "context-compactions.jsonl").read_text(encoding="utf-8"))
     assert audit["after_messages"] == len(compacted)
+    assert audit["forced_after_context_error"] is False
 
 
 def test_short_history_is_left_unchanged(tmp_path):
@@ -54,3 +55,21 @@ def test_reasoning_and_tool_calls_count_toward_context(tmp_path):
     with_reasoning = [{"role": "assistant", "content": "ok", "reasoning": "推理过程" * 50,
                        "tool_calls": [{"id": "x", "function": {"name": "bash", "arguments": "python " + "x" * 200}}]}]
     assert subject.estimate_tokens(with_reasoning) > subject.estimate_tokens(content_only)
+
+
+def test_server_context_error_forces_minimal_retry_context(tmp_path):
+    subject = manager(tmp_path, limit=10000)
+    messages = [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "task"},
+        {"role": "assistant", "content": None, "tool_calls": [{"id": "old", "function": {"name": "bash", "arguments": "{}"}}]},
+        {"role": "tool", "tool_call_id": "old", "content": "old result"},
+        {"role": "assistant", "content": None, "tool_calls": [{"id": "last", "function": {"name": "bash", "arguments": "{}"}}]},
+        {"role": "tool", "tool_call_id": "last", "content": "latest result"},
+    ]
+    compacted = subject.prepare(messages, force=True)
+    assert [message.get("tool_call_id") for message in compacted if message.get("role") == "tool"] == ["last"]
+    assert compacted[-1]["content"] == "latest result"
+    audit = json.loads((tmp_path / "context-compactions.jsonl").read_text(encoding="utf-8"))
+    assert audit["forced_after_context_error"] is True
+    assert audit["before_messages"] == len(messages)
