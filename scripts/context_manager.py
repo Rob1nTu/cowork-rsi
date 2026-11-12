@@ -124,21 +124,25 @@ class ContextWindowManager:
 
         checkpoint = self._checkpoint(messages)
         prefix = messages[:2]
+        remainder = messages[2:]
         if force:
-            tail = [self._trim_observation(message) for message in messages[-2:]]
-            managed = prefix + [self._pointer(checkpoint, len(messages) - len(prefix) - len(tail))] + tail
+            start = len(remainder)
+            while start and remainder[start - 1].get("role") == "tool":
+                start -= 1
+            if start:
+                start -= 1
+            tail = [self._trim_observation(message) for message in remainder[start:]]
         else:
-            tail = self._complete_recent_tail(messages[2:])
-            managed = prefix + [self._pointer(checkpoint, len(messages) - len(prefix) - len(tail))] + tail
-        while self.estimate_tokens(managed) > self.input_budget and len(tail) > 2:
-            drop = 2 if tail[0].get("role") == "assistant" and tail[1].get("role") == "tool" else 1
+            tail = self._complete_recent_tail(remainder)
+        managed = prefix + [self._pointer(checkpoint, len(remainder) - len(tail))] + tail
+        while self.estimate_tokens(managed) > self.input_budget and tail:
+            drop = 1
+            while drop < len(tail) and tail[drop].get("role") == "tool":
+                drop += 1
+            if drop == len(tail):
+                break
             tail = tail[drop:]
-            while tail and tail[0].get("role") == "tool":
-                tail = tail[1:]
-            managed = prefix + [self._pointer(checkpoint, len(messages) - len(prefix) - len(tail))] + tail
-        if self.estimate_tokens(managed) > self.input_budget:
-            recent = self._complete_recent_tail(messages[-2:])
-            managed = prefix + [self._pointer(checkpoint, len(messages) - len(prefix))] + recent
+            managed = prefix + [self._pointer(checkpoint, len(remainder) - len(tail))] + tail
         if self.estimate_tokens(managed) > self.input_budget:
             raise ContextBudgetExceeded(
                 f"context remains above input budget: {self.estimate_tokens(managed)} > {self.input_budget}"

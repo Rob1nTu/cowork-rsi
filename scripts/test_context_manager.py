@@ -76,3 +76,21 @@ def test_server_context_error_forces_minimal_retry_context(tmp_path):
     audit = json.loads((tmp_path / "context-compactions.jsonl").read_text(encoding="utf-8"))
     assert audit["forced_after_context_error"] is True
     assert audit["before_messages"] == len(messages)
+
+
+def test_forced_compaction_preserves_multiple_tool_results_and_short_prefix(tmp_path):
+    subject = manager(tmp_path)
+    prefix = [{"role": "system", "content": "system"}, {"role": "user", "content": "task"}]
+    short = subject.prepare(prefix, force=True)
+    assert short[:2] == prefix
+    assert len(short) == 3
+    exchange = [
+        {"role": "assistant", "content": None, "tool_calls": [
+            {"id": "one", "function": {"name": "bash", "arguments": "{}"}},
+            {"id": "two", "function": {"name": "bash", "arguments": "{}"}},
+        ]},
+        {"role": "tool", "tool_call_id": "one", "content": "first"},
+        {"role": "tool", "tool_call_id": "two", "content": "second"},
+    ]
+    compacted = subject.prepare(prefix + exchange, force=True)
+    assert compacted[-3:] == exchange

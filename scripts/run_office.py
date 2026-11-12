@@ -149,7 +149,7 @@ def main() -> None:
     parser.add_argument('--task', required=True)
     parser.add_argument('--run', required=True)
     parser.add_argument('--memory', type=Path)
-    parser.add_argument('--steps', type=int, default=40)
+    parser.add_argument('--steps', type=int, default=50)
     parser.add_argument('--context-limit', type=int, default=24576)
     parser.add_argument('--max-tokens', type=int, default=4096)
     parser.add_argument('--no-thinking', action='store_true')
